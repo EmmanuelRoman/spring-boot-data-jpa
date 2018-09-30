@@ -7,7 +7,6 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
 	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	crossorigin="anonymous" />
-
 </head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -26,29 +25,34 @@
 
 	</nav>
 	<div class="container">
-
 		<h1 th:text="${titulo}" class="text-secondary border"></h1>
-		<a th:href="@{/clientes/formulario}">Alta de Cliente</a>
-		<table class="table table-striped">
-			<thead>
+
+
+		<form th:action="@{/clientes/formulario/guardar}"
+			th:object="${cliente}" method="POST">
+			<input type="hidden" th:field="*{id}" />
+			<table>
+
 				<tr>
-					<th>ID</th>
-					<th>NOMBRE</th>
-					<th>APELLIDO</th>
-					<th>CORREO</th>
-					<th>CREADO</th>
+					<td>NOMBRE</td>
+					<td><input type="text" th:field="*{nombre}"
+						class="form-control" /></td>
 				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="cliente: ${clientes}">
-					<td th:text="${cliente.id}"></td>
-					<td th:text="${cliente.nombre}"></td>
-					<td th:text="${cliente.apellido}"></td>
-					<td th:text="${cliente.email}"></td>
-					<td th:text="${cliente.createAt}"></td>
+				<tr>
+					<td>APELLIDO</td>
+					<td><input type="text" th:field="*{apellido}"
+						class="form-control" /></td>
 				</tr>
-			</tbody>
-		</table>
+				<tr>
+					<td>EMAIL</td>
+					<td><input type="email" th:field="*{email}"
+						class="form-control" /></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="Guardar" class="btn btn-primary"/></td>
+				</tr>
+			</table>
+		</form>
 	</div>
 </body>
 </html>

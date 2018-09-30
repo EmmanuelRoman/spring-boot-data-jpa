@@ -13,20 +13,21 @@ import com.bolsaideas.springboot.app.model.dao.IClienteDao;
 import com.bolsaideas.springboot.app.model.entity.Cliente;
 
 @Controller
+@RequestMapping(value = "/clientes")
 public class ClienteController {
 
 	@Autowired
 	@Qualifier("clienteDaoJPA")
 	private IClienteDao clienteDao;
 
-	@RequestMapping(value = "/clientes/lista", method = RequestMethod.GET)
+	@RequestMapping(value = "/lista", method = RequestMethod.GET)
 	public String lista(Model modelo) {
 		modelo.addAttribute("titulo", "Listado de Clientes");
 		modelo.addAttribute("clientes", clienteDao.findAll());
 		return "lista";
 	}
 
-	@RequestMapping(value = "/clientes/formulario")
+	@RequestMapping(value = "/formulario")
 	public String crear(Map<String, Object> modelo) {
 		Cliente cliente = new Cliente();
 		modelo.put("cliente", cliente);
@@ -34,9 +35,9 @@ public class ClienteController {
 		return "formulario";
 	}
 
-	@RequestMapping(value = "/clientes/formulario", method = RequestMethod.POST)
+	@RequestMapping(value = "/formulario/guardar", method = RequestMethod.POST)
 	public String guardar(Cliente cliente) {
 		clienteDao.save(cliente);
-		return "redirect:clientes/lista";
+		return "redirect:/clientes/lista";
 	}
 }
