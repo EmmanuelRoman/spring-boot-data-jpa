@@ -31,26 +31,32 @@
 		<form th:action="@{/clientes/formulario/guardar}"
 			th:object="${cliente}" method="POST">
 			<input type="hidden" th:field="*{id}" />
-			<table>
+			<table class="table table-bordered">
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">NOMBRE</label>
+					<div class="col-sm-6">
+						<input type="text" th:field="*{nombre}" class="form-control" />
+					</div>
 
-				<tr>
-					<td>NOMBRE</td>
-					<td><input type="text" th:field="*{nombre}"
-						class="form-control" /></td>
-				</tr>
-				<tr>
-					<td>APELLIDO</td>
-					<td><input type="text" th:field="*{apellido}"
-						class="form-control" /></td>
-				</tr>
-				<tr>
-					<td>EMAIL</td>
-					<td><input type="email" th:field="*{email}"
-						class="form-control" /></td>
-				</tr>
-				<tr>
-					<td><input type="submit" value="Guardar" class="btn btn-primary"/></td>
-				</tr>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">APELLIDO</label>
+					<div class="col-sm-6">
+						<input type="text" th:field="*{apellido}" class="form-control" />
+					</div>
+
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">EMAIL</label>
+					<div class="col-sm-6">
+						<input type="text" th:field="*{email}" class="form-control" />
+					</div>
+
+				</div>
+				<div class="form-group">
+					<input type="submit" value="Guardar" class="btn btn-primary" />
+				</div>
+
 			</table>
 		</form>
 	</div>
