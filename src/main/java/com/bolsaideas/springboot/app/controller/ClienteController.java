@@ -39,8 +39,9 @@ public class ClienteController {
 	}
 
 	@RequestMapping(value = "/formulario/guardar", method = RequestMethod.POST)
-	public String guardar(@Valid Cliente cliente, BindingResult resultado) {
+	public String guardar(@Valid Cliente cliente, BindingResult resultado, Model modelo) {
 		if (resultado.hasErrors()) {
+			modelo.addAttribute("titulo", "Formulario de Cliente");
 			return "/formulario";
 		}
 

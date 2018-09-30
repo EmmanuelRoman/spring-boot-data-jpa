@@ -27,6 +27,11 @@
 	<div class="container">
 		<h1 th:text="${titulo}" class="text-secondary border"></h1>
 
+		<div th:object="${cliente}" th:remove="tag">
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
+		</div>
 
 		<form th:action="@{/clientes/formulario/guardar}"
 			th:object="${cliente}" method="POST">
@@ -35,7 +40,8 @@
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">NOMBRE</label>
 					<div class="col-sm-6">
-						<input type="text" th:field="*{nombre}" class="form-control" /> <small
+						<input type="text" th:field="*{nombre}" class="form-control"
+							th:errorclass="'form-control alert-danger'" /> <small
 							class="form-text text-danger"
 							th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
 					</div>
@@ -44,8 +50,9 @@
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">APELLIDO</label>
 					<div class="col-sm-6">
-						<input type="text" th:field="*{apellido}" class="form-control" />
-						<small class="form-text text-danger"
+						<input type="text" th:field="*{apellido}" class="form-control"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
 							th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></small>
 					</div>
 
@@ -53,7 +60,8 @@
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">EMAIL</label>
 					<div class="col-sm-6">
-						<input type="text" th:field="*{email}" class="form-control" /> <small
+						<input type="text" th:field="*{email}" class="form-control"
+							th:errorclass="'form-control alert-danger'" /> <small
 							class="form-text text-danger"
 							th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
 					</div>
@@ -62,8 +70,9 @@
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">FECHA DE ALTA</label>
 					<div class="col-sm-6">
-						<input type="date" th:field="*{createAt}" class="form-control" />
-						<small class="form-text text-danger"
+						<input type="date" th:field="*{createAt}" class="form-control"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
 							th:if="${#fields.hasErrors('createAt')}" th:errors="*{createAt}"></small>
 					</div>
 
