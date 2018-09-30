@@ -1,5 +1,7 @@
 package com.bolsaideas.springboot.app.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bolsaideas.springboot.app.model.dao.IClienteDao;
+import com.bolsaideas.springboot.app.model.entity.Cliente;
 
 @Controller
 public class ClienteController {
@@ -21,5 +24,19 @@ public class ClienteController {
 		modelo.addAttribute("titulo", "Listado de Clientes");
 		modelo.addAttribute("clientes", clienteDao.findAll());
 		return "lista";
+	}
+
+	@RequestMapping(value = "/clientes/formulario")
+	public String crear(Map<String, Object> modelo) {
+		Cliente cliente = new Cliente();
+		modelo.put("cliente", cliente);
+		modelo.put("titulo", "Formulario de Cliente");
+		return "formulario";
+	}
+
+	@RequestMapping(value = "/clientes/formulario", method = RequestMethod.POST)
+	public String guardar(Cliente cliente) {
+		clienteDao.save(cliente);
+		return "redirect:clientes/lista";
 	}
 }
