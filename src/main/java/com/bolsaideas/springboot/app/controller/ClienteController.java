@@ -24,6 +24,7 @@ import com.bolsaideas.springboot.app.model.entity.Cliente;
 public class ClienteController {
 
 	private static final String TITULO = "titulo";
+	private static final String REDIRECTLISTA = "redirect:/clientes/lista";
 	@Autowired
 	@Qualifier("clienteDaoJPA")
 	private IClienteDao clienteDao;
@@ -49,7 +50,7 @@ public class ClienteController {
 		if (id > 0) {
 			cliente = clienteDao.findOne(id);
 		} else {
-			return "redirect:/clientes/lista";
+			return REDIRECTLISTA;
 		}
 		modelo.put("cliente", cliente);
 		modelo.put(TITULO, "Editar Cliente");
@@ -65,6 +66,15 @@ public class ClienteController {
 
 		clienteDao.save(cliente);
 		status.setComplete();
-		return "redirect:/clientes/lista";
+		return REDIRECTLISTA;
 	}
+
+	@RequestMapping(value = "/eliminar/{id}")
+	public String eliminar(@PathVariable(value = "id") Long id) {
+		if (id > 0) {
+			clienteDao.delete(id);
+		}
+		return REDIRECTLISTA;
+	}
+
 }

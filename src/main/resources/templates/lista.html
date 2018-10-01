@@ -28,7 +28,8 @@
 	<div class="container">
 
 		<h1 th:text="${titulo}" class="text-secondary border"></h1>
-		<a class="btn btn-primary btn-xs" th:href="@{/clientes/formulario}">Alta de Cliente</a>
+		<a class="btn btn-primary btn-xs" th:href="@{/clientes/formulario}">Alta
+			de Cliente</a>
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -37,7 +38,7 @@
 					<th>APELLIDO</th>
 					<th>CORREO</th>
 					<th>CREADO</th>
-					<th>Editar</th>
+					<th colspan="2" align="center">ACCIONES</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -48,7 +49,11 @@
 					<td th:text="${cliente.email}"></td>
 					<td th:text="${cliente.createAt}"></td>
 					<th><a class="btn btn-primary btn-xs"
-						th:href="@{/clientes/formulario/} + ${cliente.id}" th:text="'Editar'"></a></th>
+						th:href="@{/clientes/formulario/} + ${cliente.id}"
+						th:text="'Editar'"></a></th>
+					<th><a class="btn btn-danger btn-xs"
+						th:href="@{/clientes/eliminar/} + ${cliente.id}"
+						th:text="'Eliminar'" onclick="return confirm('El cliente será eliminado permanentemente.');"></a></th>
 				</tr>
 			</tbody>
 		</table>
