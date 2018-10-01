@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.bolsaideas.springboot.app.model.dao.IClienteDao;
 import com.bolsaideas.springboot.app.model.entity.Cliente;
+import com.bolsaideas.springboot.app.model.service.IClienteService;
 
 @Controller
 @RequestMapping(value = "/clientes")
@@ -25,14 +25,14 @@ public class ClienteController {
 
 	private static final String TITULO = "titulo";
 	private static final String REDIRECTLISTA = "redirect:/clientes/lista";
+
 	@Autowired
-	@Qualifier("clienteDaoJPA")
-	private IClienteDao clienteDao;
+	private IClienteService clienteService;
 
 	@RequestMapping(value = "/lista", method = RequestMethod.GET)
 	public String lista(Model modelo) {
 		modelo.addAttribute(TITULO, "Listado de Clientes");
-		modelo.addAttribute("clientes", clienteDao.findAll());
+		modelo.addAttribute("clientes", clienteService.findAll());
 		return "lista";
 	}
 
@@ -48,7 +48,7 @@ public class ClienteController {
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> modelo) {
 		Cliente cliente = null;
 		if (id > 0) {
-			cliente = clienteDao.findOne(id);
+			cliente = clienteService.findOne(id);
 		} else {
 			return REDIRECTLISTA;
 		}
@@ -64,7 +64,7 @@ public class ClienteController {
 			return "/formulario";
 		}
 
-		clienteDao.save(cliente);
+		clienteService.save(cliente);
 		status.setComplete();
 		return REDIRECTLISTA;
 	}
@@ -72,7 +72,7 @@ public class ClienteController {
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id) {
 		if (id > 0) {
-			clienteDao.delete(id);
+			clienteService.delete(id);
 		}
 		return REDIRECTLISTA;
 	}
