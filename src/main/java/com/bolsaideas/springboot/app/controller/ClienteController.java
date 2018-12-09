@@ -41,7 +41,7 @@ public class ClienteController {
 	@Autowired
 	private IClienteService clienteService;
 
-	@GetMapping(value = "/ver/{id}")
+	@RequestMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> modelo, RedirectAttributes flash) {
 		Cliente cliente = clienteService.findOne(id);
 		if (cliente == null) {
@@ -50,7 +50,7 @@ public class ClienteController {
 		}
 		modelo.put(CLIENTETITULO, cliente);
 		modelo.put(TITULO, "Detalle cliente: " + cliente.getNombre());
-		return null;
+		return "ver";
 	}
 
 	@GetMapping(value = "/lista")
