@@ -1,5 +1,9 @@
 package com.bolsaideas.springboot.app.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsaideas.springboot.app.model.entity.Cliente;
@@ -73,11 +78,26 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/formulario/guardar")
-	public String guardar(@Valid Cliente cliente, BindingResult resultado, Model modelo, RedirectAttributes flash,
-			SessionStatus status) {
+	public String guardar(@Valid Cliente cliente, BindingResult resultado, Model modelo,
+			@RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
 		if (resultado.hasErrors()) {
 			modelo.addAttribute(TITULO, "Formulario de Cliente");
 			return "/formulario";
+		}
+		if (!foto.isEmpty()) {
+			Path directorioRecursos = Paths.get("src//main//resources//static//uploads");
+			String rootPath = directorioRecursos.toFile().getAbsolutePath();
+			try {
+				byte[] bytes = foto.getBytes();
+				Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
+				Files.write(rutaCompleta, bytes);
+				flash.addFlashAttribute("info", "Se subio correctamente " + foto.getOriginalFilename());
+				cliente.setFoto(foto.getOriginalFilename());
+			} catch (IOException e) {				
+				e.printStackTrace();
+			}
+		}else {
+			cliente.setFoto("");
 		}
 		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado con éxito!" : "Cliente creado con éxito!";
 		clienteService.save(cliente);
