@@ -35,10 +35,23 @@ import com.bolsaideas.springboot.app.util.paginator.PageRender;
 public class ClienteController {
 
 	private static final String TITULO = "titulo";
+	private static final String CLIENTETITULO = "cliente";
 	private static final String REDIRECTLISTA = "redirect:/clientes/lista";
 
 	@Autowired
 	private IClienteService clienteService;
+
+	@GetMapping(value = "/ver/{id}")
+	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> modelo, RedirectAttributes flash) {
+		Cliente cliente = clienteService.findOne(id);
+		if (cliente == null) {
+			flash.addFlashAttribute("error", "El cliente no existe!");
+			return REDIRECTLISTA;
+		}
+		modelo.put(CLIENTETITULO, cliente);
+		modelo.put(TITULO, "Detalle cliente: " + cliente.getNombre());
+		return null;
+	}
 
 	@GetMapping(value = "/lista")
 	public String lista(@RequestParam(name = "page", defaultValue = "0") int page, Model modelo) {
@@ -54,12 +67,12 @@ public class ClienteController {
 	@RequestMapping(value = "/formulario")
 	public String crear(Map<String, Object> modelo) {
 		Cliente cliente = new Cliente();
-		modelo.put("cliente", cliente);
+		modelo.put(CLIENTETITULO, cliente);
 		modelo.put(TITULO, "Formulario de Cliente");
 		return "formulario";
 	}
 
-	@RequestMapping(value = "/formulario/{id}")
+	@GetMapping(value = "/formulario/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> modelo, RedirectAttributes flash) {
 		Cliente cliente = null;
 		if (id > 0) {
@@ -72,7 +85,7 @@ public class ClienteController {
 			flash.addFlashAttribute("danger", "El ID del cliente no puede ser 0!");
 			return REDIRECTLISTA;
 		}
-		modelo.put("cliente", cliente);
+		modelo.put(CLIENTETITULO, cliente);
 		modelo.put(TITULO, "Editar Cliente");
 		return "formulario";
 	}
@@ -93,10 +106,10 @@ public class ClienteController {
 				Files.write(rutaCompleta, bytes);
 				flash.addFlashAttribute("info", "Se subio correctamente " + foto.getOriginalFilename());
 				cliente.setFoto(foto.getOriginalFilename());
-			} catch (IOException e) {				
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else {
+		} else {
 			cliente.setFoto("");
 		}
 		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado con éxito!" : "Cliente creado con éxito!";
