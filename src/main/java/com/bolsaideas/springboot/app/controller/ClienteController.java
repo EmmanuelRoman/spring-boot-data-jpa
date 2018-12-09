@@ -11,9 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsaideas.springboot.app.model.entity.Cliente;
 import com.bolsaideas.springboot.app.model.service.IClienteService;
+import com.bolsaideas.springboot.app.util.paginator.PageRender;
 
 @Controller
 @RequestMapping(value = "/clientes")
@@ -33,12 +35,14 @@ public class ClienteController {
 	@Autowired
 	private IClienteService clienteService;
 
-	@RequestMapping(value = "/lista", method = RequestMethod.GET)
+	@GetMapping(value = "/lista")
 	public String lista(@RequestParam(name = "page", defaultValue = "0") int page, Model modelo) {
-		Pageable pageRequest = new PageRequest(page, 5);
+		Pageable pageRequest = new PageRequest(page, 4);
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
+		PageRender<Cliente> pageRender = new PageRender<>("/clientes/lista", clientes);
 		modelo.addAttribute(TITULO, "Listado de Clientes");
 		modelo.addAttribute("clientes", clientes);
+		modelo.addAttribute("page", pageRender);
 		return "lista";
 	}
 
@@ -68,7 +72,7 @@ public class ClienteController {
 		return "formulario";
 	}
 
-	@RequestMapping(value = "/formulario/guardar", method = RequestMethod.POST)
+	@PostMapping(value = "/formulario/guardar")
 	public String guardar(@Valid Cliente cliente, BindingResult resultado, Model modelo, RedirectAttributes flash,
 			SessionStatus status) {
 		if (resultado.hasErrors()) {
