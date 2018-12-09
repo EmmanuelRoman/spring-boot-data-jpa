@@ -17,7 +17,7 @@
 				</div>
 
 				<form th:action="@{/clientes/formulario/guardar}"
-					th:object="${cliente}" method="POST">
+					th:object="${cliente}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" th:field="*{id}" />
 					<table class="table table-bordered">
 						<div class="form-group row">
